@@ -1,0 +1,33 @@
+{
+  "_comment": "What: Node.js + TypeScript Discord bot package manifest for the Librarian bot. How: Declares dependencies, dev tooling, and npm scripts to build, run in dev, start from compiled output, and register slash commands against development guilds.",
+  "name": "librarian-discord-bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Discord bot scaffold for Librarian integration (placeholders only; no HTTP calls yet).",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --transpileOnly --respawn src/index.ts",
+    "register-commands": "node --loader ts-node/esm src/discord/commands/register.ts",
+    "lint": "eslint \"src/**/*.{ts,tsx}\""
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "pino": "^9.4.0",
+    "undici": "^6.19.8",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "eslint": "^9.9.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,24 @@
+// What: TypeScript configuration targeting modern Node.js for the Discord bot.
+// How: Uses ES2022 target with Node16-style modules/resolution, outputs to dist/, sources in src/,
+// and enables interop/strictness. Adds Node types for process, etc.
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["ES2022"],
+    "outDir": "dist",
+    "rootDir": "src",
+
+    "types": ["node"],
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
