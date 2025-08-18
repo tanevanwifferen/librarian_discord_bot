@@ -45,8 +45,11 @@ export async function enforceAllowedContext(interaction: Interaction): Promise<b
     return false;
   }
 
-  // Channel allow check (empty list = allow all)
-  if (!isChannelAllowed(channelId)) {
+  // Channel allow check driven by allowed-context.json:
+  // - Missing file: allow everywhere
+  // - Guild present with empty list: allow all channels in that guild
+  // - Guild not present: allowed only when NONVERIFIED_SERVERS_ALLOWED=true
+  if (!isChannelAllowed(guildId, channelId)) {
     const content = CHANNEL_BLOCKED;
     logger.gate('deny', 'channel_not_allowed', { guildId, channelId, userId: interaction.user?.id });
     await replyPublic(interaction as RepliableInteraction, content);
