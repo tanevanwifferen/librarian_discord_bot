@@ -4,7 +4,7 @@
 
 import { Client, GatewayIntentBits, Partials, Interaction } from 'discord.js';
 import { logger } from '../util/log.js';
-import { config } from '../config/env.js';
+import { config, isGuildAllowed, isChannelAllowed } from '../config/env.js';
 
 export function createClient(): Client {
   // Minimal intents for application commands and message follow-ups if needed.
@@ -37,12 +37,13 @@ export function isAllowedContext(interaction: Interaction): { allowed: boolean; 
   const guildId = interaction.guildId!;
   const channelId = interaction.channelId!;
 
-  if (config.allowedGuildIds.length > 0 && !config.allowedGuildIds.includes(guildId)) {
+  // JSON-driven gating (see config/env.ts):
+  if (!isGuildAllowed(guildId)) {
     logger.gate('deny', 'guild_not_allowed', { guildId });
     return { allowed: false, reason: 'guild_not_allowed' };
   }
 
-  if (config.allowedChannelIds.length > 0 && !config.allowedChannelIds.includes(channelId)) {
+  if (!isChannelAllowed(guildId, channelId)) {
     logger.gate('deny', 'channel_not_allowed', { guildId, channelId });
     return { allowed: false, reason: 'channel_not_allowed' };
   }

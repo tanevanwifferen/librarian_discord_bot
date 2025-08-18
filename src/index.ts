@@ -6,20 +6,13 @@
 
 import type { Interaction } from 'discord.js';
 import { logger } from './util/log.js';
-import { config, allowAllGuilds, allowAllChannels } from './config/env.js';
+import { config } from './config/env.js';
 import { createClient, loginClient } from './discord/client.js';
 import { handleInteractionCreate } from './discord/interactions/handlers.js';
 
 async function main() {
-  logger.info('Boot starting', { appId: config.appId, allowedGuilds: config.allowedGuildIds.length });
-
-  // Information about allow-list behavior (empty = allow all)
-  if (allowAllGuilds()) {
-    logger.info('No DISCORD_ALLOWED_GUILD_IDS set; allowing interactions in all guilds');
-  }
-  if (allowAllChannels()) {
-    logger.info('No DISCORD_ALLOWED_CHANNEL_IDS set; allowing interactions in all channels');
-  }
+  // Boot log (allowed-context behavior is documented in config/env.ts)
+  logger.info('Boot starting', { appId: config.appId });
 
   const client = createClient();
 
