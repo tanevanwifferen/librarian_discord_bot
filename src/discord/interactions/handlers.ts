@@ -13,6 +13,7 @@ import { LIBRARIAN_COMMAND_NAME } from '../commands/librarian.js';
 import { handleChat } from './chat.js';
 import { handleSearch } from './search.js';
 import { handleRequest } from './request.js';
+import { handleUpload } from './upload.js';
 import { handleButton } from './buttons.js';
 
 export async function handleInteractionCreate(interaction: Interaction) {
@@ -59,6 +60,9 @@ async function routeChatInput(interaction: ChatInputCommandInteraction) {
       break;
     case 'request':
       await handleRequest(interaction);
+      break;
+    case 'upload':
+      await handleUpload(interaction);
       break;
     default:
       await interaction.reply({ content: 'Unknown subcommand.', ephemeral: true });

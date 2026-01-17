@@ -52,6 +52,17 @@ export const librarianCommand = new SlashCommandBuilder()
           .setDescription('Exact filename to upload')
           .setRequired(true),
       ),
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName('upload')
+      .setDescription('Upload a PDF book to the library')
+      .addAttachmentOption((opt) =>
+        opt
+          .setName('file')
+          .setDescription('PDF file (max 25MB)')
+          .setRequired(true),
+      ),
   );
 
 // Export JSON for REST registration
