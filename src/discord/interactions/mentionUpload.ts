@@ -3,7 +3,6 @@
  * How: Listens for messages that mention the bot and have PDF attachments, then uploads to backend.
  */
 import { Message } from 'discord.js';
-import FormData from 'form-data';
 import { logger } from '../../util/log.js';
 import { config, isGuildAllowed, isChannelAllowed } from '../../config/env.js';
 
@@ -74,20 +73,16 @@ export async function handleMentionUpload(message: Message, botUserId: string): 
         throw new Error(`Failed to download file from Discord: ${downloadRes.status}`);
       }
 
-      const fileBuffer = Buffer.from(await downloadRes.arrayBuffer());
+      const fileBuffer = await downloadRes.arrayBuffer();
 
-      // Build multipart form data
+      // Build multipart form data using native FormData + Blob (works with native fetch)
+      const blob = new Blob([fileBuffer], { type: 'application/pdf' });
       const form = new FormData();
-      form.append('file', fileBuffer, {
-        filename: attachment.name,
-        contentType: 'application/pdf',
-      });
+      form.append('file', blob, attachment.name);
 
       // POST to librarian backend
       const url = `${config.librarianBaseUrl}/upload`;
-      const headers: Record<string, string> = {
-        ...form.getHeaders(),
-      };
+      const headers: Record<string, string> = {};
       if (config.librarianApiKey) {
         headers.Authorization = `Bearer ${config.librarianApiKey}`;
       }
@@ -97,7 +92,7 @@ export async function handleMentionUpload(message: Message, botUserId: string): 
       const res = await fetch(url, {
         method: 'POST',
         headers,
-        body: form.getBuffer(),
+        body: form,
       });
 
       const data = (await res.json()) as LibrarianUploadResponse;
