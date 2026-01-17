@@ -7,11 +7,11 @@ import { logger } from '../util/log.js';
 import { config, isGuildAllowed, isChannelAllowed } from '../config/env.js';
 
 export function createClient(): Client {
-  // Minimal intents for application commands and message follow-ups if needed.
   const client = new Client({
     intents: [
       GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMessages, // future follow-ups or context checks
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent, // Required to read message content and attachments
     ],
     partials: [Partials.Channel],
   });

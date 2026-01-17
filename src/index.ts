@@ -4,11 +4,12 @@
  *      All Librarian API calls are deferred to placeholders; no HTTP calls are made here.
  */
 
-import type { Interaction } from 'discord.js';
+import type { Interaction, Message } from 'discord.js';
 import { logger } from './util/log.js';
 import { config } from './config/env.js';
 import { createClient, loginClient } from './discord/client.js';
 import { handleInteractionCreate } from './discord/interactions/handlers.js';
+import { handleMentionUpload } from './discord/interactions/mentionUpload.js';
 
 async function main() {
   // Boot log (allowed-context behavior is documented in config/env.ts)
@@ -51,6 +52,18 @@ async function main() {
           // swallow
         }
       }
+    }
+  });
+
+  // Handle @mentions with PDF attachments for uploads
+  client.on('messageCreate', async (message: Message) => {
+    // Ignore bot messages
+    if (message.author.bot) return;
+
+    try {
+      await handleMentionUpload(message, client.user!.id);
+    } catch (err) {
+      logger.error('Unhandled error in messageCreate (mention upload)', { err });
     }
   });
 
