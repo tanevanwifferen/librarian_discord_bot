@@ -52,6 +52,45 @@ export const librarianCommand = new SlashCommandBuilder()
           .setDescription('Exact filename to upload')
           .setRequired(true),
       ),
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName('upload')
+      .setDescription('Upload a PDF book to the library')
+      .addAttachmentOption((opt) =>
+        opt
+          .setName('file')
+          .setDescription('PDF file (max 25MB)')
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName('science-search')
+      .setDescription('Search arXiv papers (top 5 results)')
+      .addStringOption((opt) =>
+        opt
+          .setName('query')
+          .setDescription('Search query')
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName('science-chat')
+      .setDescription('Chat with arXiv papers as context')
+      .addStringOption((opt) =>
+        opt
+          .setName('prompt')
+          .setDescription('Your prompt or question')
+          .setRequired(true),
+      )
+      .addBooleanOption((opt) =>
+        opt
+          .setName('ephemeral')
+          .setDescription('Reply ephemerally (default false)')
+          .setRequired(false),
+      ),
   );
 
 // Export JSON for REST registration
