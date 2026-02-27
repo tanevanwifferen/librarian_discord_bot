@@ -66,7 +66,7 @@ export async function handleMentionUpload(message: Message, botUserId: string): 
 
     try {
       // Download file from Discord CDN
-      logger.info({ filename: attachment.name, size: attachment.size, url: attachment.url }, 'Downloading attachment from Discord');
+      logger.info('Downloading attachment from Discord', { filename: attachment.name, size: attachment.size, url: attachment.url });
 
       const downloadRes = await fetch(attachment.url);
       if (!downloadRes.ok) {
@@ -87,7 +87,7 @@ export async function handleMentionUpload(message: Message, botUserId: string): 
         headers.Authorization = `Bearer ${config.librarianApiKey}`;
       }
 
-      logger.info({ filename: attachment.name, url }, 'Uploading to librarian backend');
+      logger.info('Uploading to librarian backend', { filename: attachment.name, url });
 
       const res = await fetch(url, {
         method: 'POST',
